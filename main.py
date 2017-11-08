@@ -83,6 +83,7 @@ class Weather:
         PRESSURE = (JSON_OBJECT["main"]["pressure"])
         return PRESSURE
 
+
 # main function
 
 def decision():
