@@ -13,7 +13,6 @@ What Do You want to check exactly?\n
 6. Send weather 
                 """
 
-
 # Template for input
 MSG_TEMPLATE_NUMBERS = [1, 2, 3, 4, 5, 6]
 
@@ -43,12 +42,16 @@ def options():
 # Setting class with functions for each answer
 class Weather:
     """Ask if is there a reason to add Class here and how could u do it with classes? Also, how about decode 3 lines in each func"""
-    def temp():
-        """Temp function with conversion to C"""
 
-        R = requests.get(
+
+    def __init__(self, R):
+        self.R = R = requests.get(
             "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
-        JSON_OBJECT = R.json()
+
+    def temp(self):
+        """Temp function with conversion to C degree"""
+
+        JSON_OBJECT = self.R.json()
         TEMP_K = (JSON_OBJECT["main"]["temp"])
         TEMP_C = TEMP_K - 273.15
         return (TEMP_C)
@@ -79,7 +82,6 @@ class Weather:
         JSON_OBJECT = R.json()
         PRESSURE = (JSON_OBJECT["main"]["pressure"])
         return PRESSURE
-
 
 # main function
 
