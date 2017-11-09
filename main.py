@@ -39,37 +39,45 @@ def options():
 
 # Setting weather functions
 
-def get_weather_json(CITY, COUNTRY):
-    """Function returning JSON file"""
-    R = requests.get("http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
-    return R.json()
 
-def temp(CITY,COUNTRY):
+def temp():
     """Temp function with conversion to C degree"""
-    TEMP_K = (get_weather_json(CITY, COUNTRY)["main"]["temp"])
+    R = requests.get(
+        "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
+    JSON_OBJECT = R.json()
+    TEMP_K = (JSON_OBJECT["main"]["temp"])
     TEMP_C = TEMP_K - 273.15
     return TEMP_C
 
-def wind(CITY, COUNTRY):
+def wind():
     """Wind function"""
-    WIND = str((get_weather_json(CITY, COUNTRY)["wind"]["speed"]))
+    R = requests.get(
+        "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
+    JSON_OBJECT = R.json()
+    WIND = str((JSON_OBJECT["wind"]["speed"]))
     return WIND
 
-def cloud(CITY, COUNTRY):
+def cloud():
     """Cloud function --> ASKING WHY THE HELL 0 WORKS HERE!"""
-    CLOUD = (get_weather_json(CITY, COUNTRY)["weather"][0]["description"])
+    R = requests.get(
+        "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
+    JSON_OBJECT = R.json()
+    CLOUD = (JSON_OBJECT["weather"][0]["description"])
     return CLOUD
 
-def pressure(CITY, COUNTRY):
+def pressure():
     """Pressure function"""
-    PRESSURE = (get_weather_json(CITY, COUNTRY)["main"]["pressure"])
+    R = requests.get(
+        "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
+    JSON_OBJECT = R.json()
+    PRESSURE = (JSON_OBJECT["main"]["pressure"])
     return PRESSURE
 
-def general(CITY, COUNTRY):
-    print("Current tempreture is: {} C.".format(temp(CITY, COUNTRY)))
-    print("Current wind speed is: {} m/s".format(wind(CITY, COUNTRY)))
-    print("Current cloudiness is: {}".format(cloud(CITY, COUNTRY)))
-    print("Current pressure is: {} hpa".format(pressure(CITY, COUNTRY)))
+def general():
+    print("Current tempreture is: {} C.".format(temp()))
+    print("Current wind speed is: {} m/s".format(wind()))
+    print("Current cloudiness is: {}".format(cloud()))
+    print("Current pressure is: {} hpa".format(pressure()))
 
 # main function
 
@@ -85,19 +93,19 @@ def decision():
             break
     if CHOICE == 1:
         print("Here is the general weather for {} in {}: \n".format(CITY, COUNTRY))
-        print(general(CITY, COUNTRY))
+        print(general())
         print(options())
     elif CHOICE == 2:
-        print("Current tempreture in {} is: {} C.".format(CITY, temp(CITY, COUNTRY)))
+        print("Current tempreture in {} is: {} C.".format(CITY, temp()))
         print(options())
     elif CHOICE == 3:
-        print("Current wind speed in {} is: {} m/s".format(CITY, wind(CITY, COUNTRY)))
+        print("Current wind speed in {} is: {} m/s".format(CITY, wind()))
         print(options())
     elif CHOICE == 4:
-        print("Current cloudiness in {} is: {}".format(CITY, cloud(CITY, COUNTRY)))
+        print("Current cloudiness in {} is: {}".format(CITY, cloud()))
         print(options())
     elif CHOICE ==5:
-        print("Current pressure in {} is: {} hpa".format(CITY, pressure(CITY, COUNTRY)))
+        print("Current pressure in {} is: {} hpa".format(CITY, pressure()))
         print(options())
     else:
         print("EMAIL SCRIPT TO IMPORT FROM ADDITIONAL")
