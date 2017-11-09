@@ -24,13 +24,11 @@ print("\n\nHello! It's super awesome weather app, in which you can check weather
 CITY = input("Weather of which city you want to check ?\n").strip().lower()
 COUNTRY = input("Please enter country code in format: United Kingdom = uk, Poland = pl\n").strip().lower()
 
-print(MSG_TEMPLATE)
-
 # func used in main func to come back
 def options():
     """Allows user to choose other option --> comming back to 1-6 section"""
     while True:
-        OPTION = input("Do You want to check other aspect of the weather or send everything via email?\n").strip().lower()
+        OPTION = input("Do You want to check other aspect of the weather?\n").strip().lower()
 
         if OPTION == "yes" or OPTION == "y":
             return decision()
@@ -39,56 +37,46 @@ def options():
         else:
             print("Hey mate, write yes or no")
 
-# Setting class with functions for each answer
-class Weather:
-    """Ask if is there a reason to add Class here and how could u do it with classes? Also, how about decode 3 lines in each func"""
+# Setting weather functions
 
+def get_weather_json(CITY, COUNTRY):
+    """Function returning JSON file"""
+    R = requests.get("http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
+    return R.json()
 
-    def __init__(self, R):
-        self.R = R = requests.get(
-            "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
+def temp(CITY,COUNTRY):
+    """Temp function with conversion to C degree"""
+    TEMP_K = (get_weather_json(CITY, COUNTRY)["main"]["temp"])
+    TEMP_C = TEMP_K - 273.15
+    return TEMP_C
 
-    def temp(self):
-        """Temp function with conversion to C degree"""
+def wind(CITY, COUNTRY):
+    """Wind function"""
+    WIND = str((get_weather_json(CITY, COUNTRY)["wind"]["speed"]))
+    return WIND
 
-        JSON_OBJECT = self.R.json()
-        TEMP_K = (JSON_OBJECT["main"]["temp"])
-        TEMP_C = TEMP_K - 273.15
-        return (TEMP_C)
+def cloud(CITY, COUNTRY):
+    """Cloud function --> ASKING WHY THE HELL 0 WORKS HERE!"""
+    CLOUD = (get_weather_json(CITY, COUNTRY)["weather"][0]["description"])
+    return CLOUD
 
-    def wind():
-        """Wind function"""
+def pressure(CITY, COUNTRY):
+    """Pressure function"""
+    PRESSURE = (get_weather_json(CITY, COUNTRY)["main"]["pressure"])
+    return PRESSURE
 
-        R = requests.get(
-            "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
-        JSON_OBJECT = R.json()
-        WIND = str((JSON_OBJECT["wind"]["speed"]))
-        return WIND
-
-    def cloud():
-        """Cloud function --> ASKING WHY THE HELL 0 WORKS HERE!"""
-
-        R = requests.get(
-            "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
-        JSON_OBJECT = R.json()
-        CLOUD = (JSON_OBJECT["weather"][0]["description"])
-        return CLOUD
-
-    def pressure():
-        """Pressure function"""
-
-        R = requests.get(
-            "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
-        JSON_OBJECT = R.json()
-        PRESSURE = (JSON_OBJECT["main"]["pressure"])
-        return PRESSURE
-
+def general(CITY, COUNTRY):
+    print("Current tempreture is: {} C.".format(temp(CITY, COUNTRY)))
+    print("Current wind speed is: {} m/s".format(wind(CITY, COUNTRY)))
+    print("Current cloudiness is: {}".format(cloud(CITY, COUNTRY)))
+    print("Current pressure is: {} hpa".format(pressure(CITY, COUNTRY)))
 
 # main function
 
 def decision():
     """Lets make user choose between 6 possibilities and force specific input"""
     while True:
+        print(MSG_TEMPLATE)
         CHOICE = int(input())
         if CHOICE not in MSG_TEMPLATE_NUMBERS:
             print("Hey, you can choose only 1-6")
@@ -96,18 +84,23 @@ def decision():
         else:
             break
     if CHOICE == 1:
-        print("Here is the general weather for {} in {}: ".format(CITY, COUNTRY))
+        print("Here is the general weather for {} in {}: \n".format(CITY, COUNTRY))
+        print(general(CITY, COUNTRY))
         print(options())
     elif CHOICE == 2:
-        print("Current tempreture in {} is: {} C.".format(CITY, Weather.temp()))
+        print("Current tempreture in {} is: {} C.".format(CITY, temp(CITY, COUNTRY)))
+        print(options())
     elif CHOICE == 3:
-        print("Current wind speed in {} is: {} m/s".format(CITY, Weather.wind()))
+        print("Current wind speed in {} is: {} m/s".format(CITY, wind(CITY, COUNTRY)))
+        print(options())
     elif CHOICE == 4:
-        print("Current cloudiness in {} is: {}".format(CITY, Weather.cloud()))
+        print("Current cloudiness in {} is: {}".format(CITY, cloud(CITY, COUNTRY)))
+        print(options())
     elif CHOICE ==5:
-        print("Current pressure in {} is: {} hpa".format(CITY, Weather.pressure()))
+        print("Current pressure in {} is: {} hpa".format(CITY, pressure(CITY, COUNTRY)))
+        print(options())
     else:
-        print("blablabla")
+        print("EMAIL SCRIPT TO IMPORT FROM ADDITIONAL")
 
 def something():
     resp = requests.get(
@@ -119,10 +112,8 @@ def something():
         pass
 
 
-
 if __name__ == "__main__":
     decision()
-
     something()
 
 
