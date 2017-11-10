@@ -2,7 +2,6 @@ import requests
 import sys
 
 
-
 # MSG template used for looping options
 
 MSG_TEMPLATE = """
@@ -19,7 +18,7 @@ What Do You want to check exactly?\n
 MSG_TEMPLATE_NUMBERS = [1, 2, 3, 4, 5, 6]
 
 # Some general code with input about city and country
-
+#CREATE FUNCTION RETURNING 404 if USER INPUT WRONG CITY / COUntry
 print("\n\nHello! It's super awesome weather app, in which you can check weather for a certain city around the world"
           " and send it as email!\n")
 
