@@ -87,21 +87,13 @@ def pressure():
     return PRESSURE
 
 def general():
+    """Prints all aspects of the weather"""
     print("Current tempreture is: {} C.".format(temp()))
     print("Current wind speed is: {} m/s".format(wind()))
     print("Current cloudiness is: {}".format(cloud()))
     print("Current pressure is: {} hpa".format(pressure()))
 
 
-
-def send():
-    a = "Current tempreture is: {} C.\n".format(temp())
-    b = "Current wind speed is: {} m/s\n".format(wind())
-    c = "Current cloudiness is: {}\n".format(cloud())
-    d = "Current pressure is: {} hpa\n".format(pressure())
-
-    FULL = a + b + c + d
-    return FULL
 
 # main function
 
@@ -134,6 +126,17 @@ def decision():
     else:
         email_script.sending_email()
 
+
+#output for the email script
+def send():
+    """Prints msg in email script"""
+    a = "Current tempreture is: {} C.\n".format(temp())
+    b = "Current wind speed is: {} m/s\n".format(wind())
+    c = "Current cloudiness is: {}\n".format(cloud())
+    d = "Current pressure is: {} hpa\n".format(pressure())
+
+    FULL = a + b + c + d
+    return FULL
 
 if __name__ == "__main__":
     input_function()
