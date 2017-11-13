@@ -1,5 +1,7 @@
 import requests
 import sys
+import email_script
+import builtins
 
 # MSG template used for looping options
 
@@ -12,27 +14,20 @@ What Do You want to check exactly?\n
 5. Pressure\n
 6. Send weather 
                 """
-
 # Template for input
 MSG_TEMPLATE_NUMBERS = [1, 2, 3, 4, 5, 6]
-
-
-print("\n\nHello! It's super awesome weather app, in which you can check weather for a certain city around the world"
-          " and send it as email!\n")
-
-
-
-
 
 #Checking input of user
 
 def input_function():
     """loops until server response is not 200, input checker"""
+    print(
+        "\n\nHello! It's super awesome weather app, in which you can check weather for a certain city around the world"
+        " and send it as email!\n")
     while True:
-        global CITY
-        global COUNTRY
-        CITY = input("Weather of which city you want to check ?\n").strip().lower()
-        COUNTRY = input("Please enter country code in format: United Kingdom = uk, Poland = pl\n").strip().lower()
+
+        builtins.CITY = input("Weather of which city you want to check ?\n").strip().lower()
+        builtins.COUNTRY = input("Please enter country code in format: United Kingdom = uk, Poland = pl\n").strip().lower()
 
         resp = requests.get(
             "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
@@ -41,9 +36,6 @@ def input_function():
             continue
         else:
             break
-
-
-
 
 # func used in main func to come back
 def options():
@@ -100,6 +92,17 @@ def general():
     print("Current cloudiness is: {}".format(cloud()))
     print("Current pressure is: {} hpa".format(pressure()))
 
+
+
+def send():
+    a = "Current tempreture is: {} C.\n".format(temp())
+    b = "Current wind speed is: {} m/s\n".format(wind())
+    c = "Current cloudiness is: {}\n".format(cloud())
+    d = "Current pressure is: {} hpa\n".format(pressure())
+
+    FULL = a + b + c + d
+    return FULL
+
 # main function
 
 def decision():
@@ -129,12 +132,13 @@ def decision():
         print("Current pressure in {} is: {} hpa".format(CITY, pressure()))
         print(options())
     else:
-        print("EMAIL SCRIPT TO IMPORT FROM ADDITIONAL")
+        email_script.sending_email()
 
 
 if __name__ == "__main__":
     input_function()
     decision()
+
 
 
 
