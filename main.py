@@ -4,7 +4,6 @@ import email_script
 import builtins
 
 # MSG template used for looping options
-
 MSG_TEMPLATE = """
 What Do You want to check exactly?\n
 1. Weather in general\n
@@ -18,7 +17,6 @@ What Do You want to check exactly?\n
 MSG_TEMPLATE_NUMBERS = [1, 2, 3, 4, 5, 6]
 
 #Checking input of user
-
 def input_function():
     """loops until server response is not 200, input checker"""
     print(
@@ -51,8 +49,6 @@ def options():
             print("Hey mate, write yes or no")
 
 # Setting weather functions
-
-
 def temp():
     """Temp function with conversion to C degree"""
     R = requests.get(
@@ -93,10 +89,7 @@ def general():
     print("Current cloudiness is: {}".format(cloud()))
     print("Current pressure is: {} hpa".format(pressure()))
 
-
-
 # main function
-
 def decision():
     """Lets make user choose between 6 possibilities and force specific input"""
     while True:
@@ -125,7 +118,6 @@ def decision():
         print(options())
     else:
         email_script.sending_email()
-
 
 #output for the email script
 def send():
