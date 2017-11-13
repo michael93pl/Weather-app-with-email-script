@@ -1,7 +1,6 @@
 import requests
 import sys
 
-
 # MSG template used for looping options
 
 MSG_TEMPLATE = """
@@ -17,13 +16,34 @@ What Do You want to check exactly?\n
 # Template for input
 MSG_TEMPLATE_NUMBERS = [1, 2, 3, 4, 5, 6]
 
-# Some general code with input about city and country
-#CREATE FUNCTION RETURNING 404 if USER INPUT WRONG CITY / COUntry
+
 print("\n\nHello! It's super awesome weather app, in which you can check weather for a certain city around the world"
           " and send it as email!\n")
 
-CITY = input("Weather of which city you want to check ?\n").strip().lower()
-COUNTRY = input("Please enter country code in format: United Kingdom = uk, Poland = pl\n").strip().lower()
+
+
+
+
+#Checking input of user
+
+def input_function():
+    """loops until server response is not 200, input checker"""
+    while True:
+        global CITY
+        global COUNTRY
+        CITY = input("Weather of which city you want to check ?\n").strip().lower()
+        COUNTRY = input("Please enter country code in format: United Kingdom = uk, Poland = pl\n").strip().lower()
+
+        resp = requests.get(
+            "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
+        if resp.status_code != 200:
+            print("Hey, you messed with the city or the country. Write correct city name and country in proper format")
+            continue
+        else:
+            break
+
+
+
 
 # func used in main func to come back
 def options():
@@ -111,19 +131,10 @@ def decision():
     else:
         print("EMAIL SCRIPT TO IMPORT FROM ADDITIONAL")
 
-def something():
-    resp = requests.get(
-        "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
-
-    if resp.status_code !=200:
-        raise Exception("GET / oauth/ {}".format(resp.status_code))
-    else:
-        pass
-
 
 if __name__ == "__main__":
+    input_function()
     decision()
-    something()
 
 
 
