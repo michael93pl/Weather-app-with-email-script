@@ -3,11 +3,13 @@ import additional
 import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
-
+import main
 
 def sending_email():
+    """Email script with email box input from user)"""
 
+    EMAIL_BOX = input("Please provide Your email adress\n")
+    TIME = datetime.datetime.now()
     #server commends
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
@@ -24,10 +26,10 @@ def sending_email():
     server.login(FROM, PASSWORD)
 
     #template for recievers
-    TOADDR = ["michael93pl@gmail.com"]
+    TOADDR = [EMAIL_BOX]
     CC = []
-    SUBJECT = "testing"
-    TEXT = "TEST FOR GITHUB"
+    SUBJECT = "Weather for {}.".format(TIME)
+    TEXT = str(main.send())
 
     #MSG template
 
@@ -49,7 +51,6 @@ def sending_email():
 
     server.sendmail(FROM, FINAL_TO, MSG)
 
-    TIME = datetime.datetime.now()
+
     print("Email sent at {}".format(TIME))
 
-sending_email()
