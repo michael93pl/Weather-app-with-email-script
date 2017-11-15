@@ -4,7 +4,7 @@ import email_script
 import builtins
 
 # MSG template used for looping options
-MSG_TEMPLATE = """
+msg_template = """
 What Do You want to check exactly?\n
 1. Weather in general\n
 2. Tempreture\n
@@ -14,7 +14,7 @@ What Do You want to check exactly?\n
 6. Send weather 
                 """
 # Template for input
-MSG_TEMPLATE_NUMBERS = [1, 2, 3, 4, 5, 6]
+msg_template_numbers = [1, 2, 3, 4, 5, 6]
 
 #Checking input of user
 def input_function():
@@ -24,11 +24,12 @@ def input_function():
         " and send it as email!\n")
     while True:
 
-        builtins.CITY = input("Weather of which city you want to check ?\n").strip().lower()
-        builtins.COUNTRY = input("Please enter country code in format: United Kingdom = uk, Poland = pl\n").strip().lower()
+        builtins.city = input("Weather of which city you want to check ?\n").strip().lower()
+        builtins.country = input("Please enter country code in format: United Kingdom = uk, Poland = pl\n").strip().lower()
+
 
         resp = requests.get(
-            "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
+            "http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + country + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
         if resp.status_code != 200:
             print("Hey, you messed with the city or the country. Write correct city name and country in proper format")
             continue
@@ -39,85 +40,82 @@ def input_function():
 def options():
     """Allows user to choose other option --> comming back to 1-6 section"""
     while True:
-        OPTION = input("Do You want to check other aspect of the weather?\n").strip().lower()
+        option = input("Do You want to check other aspect of the weather?\n").strip().lower()
 
-        if OPTION == "yes" or OPTION == "y":
+        if option == "yes" or option == "y":
             return decision()
-        elif OPTION =="no" or OPTION =="n":
+        elif option =="no" or option =="n":
             sys.exit("Well that would be it! Thanks for using my ap!")
         else:
             print("Hey mate, write yes or no")
 
+#api funcitions
+def call_api():
+    """Calling api and returning json object for weather functions"""
+    r = requests.get(
+        "http://api.openweathermap.org/data/2.5/weather?q=" + city + "," + country + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
+    json_object = r.json()
+    return json_object
+
+
 # Setting weather functions
 def temp():
     """Temp function with conversion to C degree"""
-    R = requests.get(
-        "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
-    JSON_OBJECT = R.json()
-    TEMP_K = (JSON_OBJECT["main"]["temp"])
-    TEMP_C = TEMP_K - 273.15
-    return TEMP_C
+    temp_k = (call_api()["main"]["temp"])
+    temp_c = temp_k - 273.15
+    return temp_c
 
 def wind():
     """Wind function"""
-    R = requests.get(
-        "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
-    JSON_OBJECT = R.json()
-    WIND = str((JSON_OBJECT["wind"]["speed"]))
-    return WIND
+    wind = str((call_api()["wind"]["speed"]))
+    return wind
 
 def cloud():
-    """Cloud function --> ASKING WHY THE HELL 0 WORKS HERE!"""
-    R = requests.get(
-        "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
-    JSON_OBJECT = R.json()
-    CLOUD = (JSON_OBJECT["weather"][0]["description"])
-    return CLOUD
+    """Cloud function"""
+    cloud = (call_api()["weather"][0]["description"])
+    return cloud
 
 def pressure():
     """Pressure function"""
-    R = requests.get(
-        "http://api.openweathermap.org/data/2.5/weather?q=" + CITY + "," + COUNTRY + "&appid=8d502f878a7d8c7f485816a3e1ac68b6")
-    JSON_OBJECT = R.json()
-    PRESSURE = (JSON_OBJECT["main"]["pressure"])
-    return PRESSURE
+    pressure = (call_api()["main"]["pressure"])
+    return pressure
 
 def general():
     """Prints all aspects of the weather"""
-    A = "Current tempreture is: {} C.\n".format(temp())
-    B = "Current wind speed is: {} m/s\n".format(wind())
-    C = "Current cloudiness is: {}\n".format(cloud())
-    D = "Current pressure is: {} hpa\n".format(pressure())
+    a = "Current tempreture is: {} C.\n".format(temp())
+    b = "Current wind speed is: {} m/s\n".format(wind())
+    c = "Current cloudiness is: {}\n".format(cloud())
+    d = "Current pressure is: {} hpa\n".format(pressure())
 
-    FULL = A + B + C + D
-    return FULL
+    full = a + b + c + d
+    return full
 
 # main function
 def decision():
     """Lets make user choose between 6 possibilities and force specific input"""
     while True:
-        print(MSG_TEMPLATE)
-        CHOICE = int(input())
-        if CHOICE not in MSG_TEMPLATE_NUMBERS:
+        print(msg_template)
+        choise = int(input())
+        if choise not in msg_template_numbers:
             print("Hey, you can choose only 1-6")
-            print(MSG_TEMPLATE)
+            print(msg_template)
         else:
             break
-    if CHOICE == 1:
-        print("Here is the general weather for {} in {}: \n".format(CITY, COUNTRY))
+    if choise == 1:
+        print("Here is the general weather for {} in {}: \n".format(city, country))
         print(general())
         print(options())
-    elif CHOICE == 2:
-        print("Current tempreture in {} is: {} C.".format(CITY, temp()))
+    elif choise == 2:
+        print("Current tempreture in {} is: {} C.".format(city, temp()))
         print(options())
-    elif CHOICE == 3:
-        print("Current wind speed in {} is: {} m/s".format(CITY, wind()))
+    elif choise == 3:
+        print("Current wind speed in {} is: {} m/s".format(city, wind()))
         print(options())
-    elif CHOICE == 4:
-        print("Current cloudiness in {} is: {}".format(CITY, cloud()))
+    elif choise == 4:
+        print("Current cloudiness in {} is: {}".format(city, cloud()))
         print(options())
-    elif CHOICE ==5:
-        print("Current pressure in {} is: {} hpa".format(CITY, pressure()))
+    elif choise ==5:
+        print("Current pressure in {} is: {} hpa".format(city, pressure()))
         print(options())
     else:
         email_script.sending_email()
@@ -125,13 +123,13 @@ def decision():
 #output for the email script
 def send():
     """Prints msg in email script"""
-    A = "Current tempreture is: {} C.\n".format(temp())
-    B = "Current wind speed is: {} m/s\n".format(wind())
-    C = "Current cloudiness is: {}\n".format(cloud())
-    D = "Current pressure is: {} hpa\n".format(pressure())
+    a = "Current tempreture is: {} C.\n".format(temp())
+    b = "Current wind speed is: {} m/s\n".format(wind())
+    c = "Current cloudiness is: {}\n".format(cloud())
+    d = "Current pressure is: {} hpa\n".format(pressure())
 
-    FULL = A + B + C + D
-    return FULL
+    full = a + b + c + d
+    return full
 
 if __name__ == "__main__":
     input_function()

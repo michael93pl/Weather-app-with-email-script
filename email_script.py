@@ -5,52 +5,56 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import main
 
+server_info = smtplib.SMTP('smtp.gmail.com', 587)
+
+
+
 def sending_email():
     """Email script with email box input from user)"""
 
-    EMAIL_BOX = input("Please provide Your email adress\n")
-    TIME = datetime.datetime.now()
+    reciever_addr = input("Please provide Your email adress\n")
+    time = datetime.datetime.now()
     #server commends
-    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server = server_info
     server.ehlo()
     server.starttls()
     server.ehlo()
 
 
     #credentials of sender
-    FROM = "michael93pl"
-    PASSWORD = additional.x
+    who = "michael93pl"
+    password = additional.x
 
 
     #logging in
-    server.login(FROM, PASSWORD)
+    server.login(who, password)
 
     #template for recievers
-    TOADDR = [EMAIL_BOX]
-    CC = []
-    SUBJECT = "Weather for {}.".format(TIME)
-    TEXT = str(main.send())
+    toaddr = [reciever_addr]
+    cc = []
+    subject = "Weather for {}.".format(time)
+    text = str(main.send())
 
     #MSG template
 
 
     message = MIMEMultipart()
-    message['From'] = "Michal <{}>".format(FROM)
-    message['To'] = ", ".join(TOADDR)
-    message['Cc'] = ", ".join(CC)
-    message['Subject'] = SUBJECT
-    message.attach(MIMEText(TEXT))
+    message['From'] = "Michal <{}>".format(who)
+    message['To'] = ", ".join(toaddr)
+    message['Cc'] = ", ".join(cc)
+    message['Subject'] = subject
+    message.attach(MIMEText(text))
 
-    MSG = message.as_string()
+    msg = message.as_string()
 
     #Join reciever with CC
 
-    FINAL_TO = CC + TOADDR
+    final_to = cc + toaddr
 
 
 
-    server.sendmail(FROM, FINAL_TO, MSG)
+    server.sendmail(who, final_to, msg)
 
 
-    print("Email sent at {}".format(TIME))
+    print("Email sent at {}".format(time))
 
