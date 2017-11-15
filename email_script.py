@@ -18,7 +18,7 @@ def sending_email():
 
 
     #credentials of sender
-    FROM = "xxx"
+    FROM = "michael93pl"
     PASSWORD = additional.x
 
 
